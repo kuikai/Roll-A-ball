@@ -1,14 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class Movee : MonoBehaviour {
     public float speed;
     Rigidbody rb;
+
+    public Text CountText;
+    public Text winText;
+    private int count;
 	void Start () {
         rb = GetComponent<Rigidbody>();
-        
-	}
+        count = 0;
+        CountText.text = "count" + count.ToString();
+        winText.text = "";
+ 	}
 
     // Update is called once per frame
 
@@ -21,8 +28,9 @@ public class Movee : MonoBehaviour {
 
         Vector3 movement = new Vector3(movH, 0.0f, movV);
         rb.AddForce(movement * speed);
+        SetCountText();
 
-        
+
     }
     void Update () {
 		
@@ -30,4 +38,25 @@ public class Movee : MonoBehaviour {
 
 
 	}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Pick Up"))
+        {
+            other.gameObject.SetActive(false);
+            count++;
+            SetCountText();
+
+            if (count == 8)
+            {
+                winText.text = "Win";
+            }
+
+        }
+    }
+    void SetCountText()
+    {
+        CountText.text = "count: " + count.ToString();
+        
+    }
 }
